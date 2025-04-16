@@ -1,0 +1,55 @@
+<!doctype html>
+{% load static %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{% static 'css/post_info.css' %}">
+    <title>Посты</title>
+</head>
+<body>
+    <header>
+        <a href="/posts">Все посты</a>
+        <a href="/posts/add_post">Добавить пост</a>
+        <a href="/posts/my_posts">Мои посты</a>
+        <button id="showUser" type="button">Пользователь</button>
+        <dialog id="dialog">
+            <p>{{ test }}</p>
+            <button type="button"><a href="/authorization">Выйти</a></button>
+        </dialog>
+    </header>
+    <main>
+        <div class="info">
+            {% for p in post %}
+            <h3>Автор: {{ p.user_email }}</h3>
+                <h2 class="name">{{ p.name }}</h2>
+                <p class="text">{{ p.full_text }}</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Лайк" name="like">
+                    {{ p.like }}
+                </form>
+            {% endfor %}
+
+        </div>
+
+        <div class="comments">
+            <h2>Комментарии</h2>
+            {% for comment in comments  %}
+            <div class="comment">
+                <h3>{{ comment.user_email }}</h3>
+                <p>{{ comment.text }}</p>
+            </div>
+                {% endfor %}
+            <form method="post">
+                {% csrf_token %}
+                <input type="text" name="comment" placeholder="Введите комментарий" minlength="0">
+                <input type="submit" value="Добавить">
+            </form>
+        </div>
+    </main>
+</body>
+<script src="{% static 'js/index.js' %}"></script>
+</html>
